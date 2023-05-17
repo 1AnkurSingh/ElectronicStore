@@ -1,5 +1,6 @@
 package com.electronicstore.services;
 
+import com.electronicstore.dtos.PageableResponse;
 import com.electronicstore.dtos.UserDto;
 import com.electronicstore.entity.User;
 
@@ -26,7 +27,7 @@ public interface UserService {
 
     // get All user
 
-    List<UserDto>getAllUser();
+    PageableResponse<UserDto>getAllUser(int pageNumber, int pageSize, String sortBy, String sortDir);
 
 
     // get user by email

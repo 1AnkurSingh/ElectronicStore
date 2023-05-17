@@ -1,12 +1,26 @@
 package com.electronicstore.services.imp;
 
+import com.electronicstore.dtos.PageableResponse;
 import com.electronicstore.dtos.UserDto;
 import com.electronicstore.entity.User;
+import com.electronicstore.exception.ResourceNotFoundException;
+import com.electronicstore.helper.Helper;
 import com.electronicstore.repository.UserRepository;
 import com.electronicstore.services.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -15,6 +29,12 @@ import java.util.stream.Collectors;
 public class UserServiceImp implements UserService {
     @Autowired
     UserRepository userRepository;
+
+    @Value("${user.profile.image.path}")
+    private String imagePath;
+
+
+    Logger logger= LoggerFactory.getLogger(UserServiceImp.class);
     @Override
     public UserDto crateUser(UserDto userDto) {
         String userId = UUID.randomUUID().toString();
@@ -31,7 +51,7 @@ public class UserServiceImp implements UserService {
 
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User Id Not Found!!"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Id Not Found!!"));
         user.setName(userDto.getName());
 //      user.setEmail(userDto.getEmail());
         user.setAbout(userDto.getAbout());
@@ -45,29 +65,52 @@ public class UserServiceImp implements UserService {
 
     @Override
     public void deleteUser(String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User Id Not Found!!"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Id Not Found!!"));
+
+
+        // delete user profile image
+
+        String fullPath = imagePath + user.getImageName();
+
+        try{
+
+            Path path= Paths.get(fullPath);
+
+            Files.delete(path);
+
+        }catch (IOException ex){
+            logger.info("user image not found in folder !!");
+            ex.printStackTrace();
+        }
+
         userRepository.delete(user);
 
     }
 
     @Override
     public UserDto getUserById(String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User Id Not Found!!"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User Id Not Found!!"));
 
         return entityToDto(user);
     }
 
     @Override
-    public List<UserDto> getAllUser()
+    public PageableResponse<UserDto> getAllUser(int pageNumber, int pageSize , String sortBy, String sortDir)
     {
-        List<User> users = userRepository.findAll();
-        List<UserDto> dtoList = users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
-        return dtoList;
+        Sort sort = (sortDir.equalsIgnoreCase("desc"))? (Sort.by(sortBy).descending()): (Sort.by(sortBy).ascending());
+
+        Pageable pageable= PageRequest.of(pageNumber-1,pageSize,sort);
+
+        Page<User> page = userRepository.findAll(pageable);
+
+        PageableResponse<UserDto> pageableResponse = Helper.getPageableResponse(page, UserDto.class);
+
+        return pageableResponse;
     }
 
     @Override
     public UserDto getUserByEmail(String userEmail) {
-        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new RuntimeException("Email Not Found Exception!!!!"));
+        User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("Email Not Found Exception!!!!"));
         return entityToDto(user);
     }
 
