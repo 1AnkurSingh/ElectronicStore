@@ -12,7 +12,7 @@ public interface ProductService {
 
     // update
 
-    ProductDto product(ProductDto productDto,String productId);
+    ProductDto updateProduct(ProductDto productDto,String productId);
 
 
     //delete
@@ -31,10 +31,10 @@ public interface ProductService {
 
    // get All live
 
-    List<ProductDto> getAllLiveProduct();
+    PageableResponse<ProductDto>getAllLiveProduct(int pageNumber,int pageSize,String sortBy, String sortDir);
 
 
     //search by title
 
-    List<ProductDto>searchByTitle(String title);
+    PageableResponse<ProductDto>searchByTitle(int pageNumber,int pageSize,String sortBy, String sortDir,String subTitle);
 }
