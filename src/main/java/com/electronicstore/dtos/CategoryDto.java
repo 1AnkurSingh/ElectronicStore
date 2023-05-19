@@ -22,4 +22,6 @@ public class CategoryDto {
     private  String description;
 
     private String coverImage;
+
+
 }

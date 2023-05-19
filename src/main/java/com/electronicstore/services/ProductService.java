@@ -2,6 +2,7 @@ package com.electronicstore.services;
 
 import com.electronicstore.dtos.PageableResponse;
 import com.electronicstore.dtos.ProductDto;
+import com.electronicstore.entity.Product;
 
 import java.util.List;
 
@@ -37,4 +38,15 @@ public interface ProductService {
     //search by title
 
     PageableResponse<ProductDto>searchByTitle(int pageNumber,int pageSize,String sortBy, String sortDir,String subTitle);
+
+
+    // crate product with id
+    ProductDto createWithCategory(ProductDto productDto, String CategoryId);
+
+
+    // update category  of product
+    ProductDto updateCategory(String productId,String categoryId);
+
+    //category
+    PageableResponse<ProductDto>getAllOfCategory(String categoryId,int pageNumber,int pageSize,String sortBy,String sortDir);
 }

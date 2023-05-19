@@ -2,9 +2,7 @@ package com.electronicstore.entity;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
 
 @Getter
@@ -34,6 +32,13 @@ public class Product {
      private boolean live;
 
      private  boolean stock;
+
+     private String productImageName;
+
+     @ManyToOne(fetch = FetchType.EAGER)
+     @JoinColumn(name = "categoryId")
+     private Category category;
+
 
 
 
