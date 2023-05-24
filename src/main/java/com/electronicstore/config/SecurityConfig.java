@@ -38,8 +38,8 @@ public class SecurityConfig {
 //        return new InMemoryUserDetailsManager(normalUser,adminUser);
 //    }
 
-//    @Bean
-//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 //        http.authorizeRequests()
 //                        .anyRequest()
 //                                .authenticated()
@@ -52,7 +52,19 @@ public class SecurityConfig {
 //
 //
 //        return http.build();
-//    }
+
+        http.csrf()
+                        .disable()
+                                .cors()
+                                        .disable()
+                                                .authorizeRequests()
+                                                        .anyRequest()
+                                                                .authenticated()
+                                                                        .and()
+                                                                                .httpBasic();
+               return http.build();
+
+    }
 
 
 
