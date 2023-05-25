@@ -5,6 +5,7 @@ import com.electronicstore.dtos.UserDto;
 import com.electronicstore.entity.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -38,4 +39,6 @@ public interface UserService {
     // (search)get user by keyword
 
     List<UserDto>getUserByKeyWord(String keyword);
+
+    Optional<User>findUserByEmailOptional(String email);
 }
