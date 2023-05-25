@@ -1,14 +1,12 @@
 package com.electronicstore.entity;
-
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
+import java.util.*;
+import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,34 +15,31 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
-
     @Id
     private String userId;
-
     @Column(name = "user_name")
     private String name;
-
     @Column(name = "user_email")
     private String email;
-
-
     @Column(name = "user_password")
     private String password;
-
     private String gender;
-
     private String about;
-
     @Column(name = "user_image_name")
     private String imageName;
-
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     private List<Order>orders= new ArrayList<>();
 
-//  Must have to implement
+    @ManyToMany(fetch = FetchType.EAGER,cascade =CascadeType.ALL)
+    private Set<Role>roles= new HashSet<>();
+
+    @OneToOne(mappedBy = "user",cascade = CascadeType.REMOVE)
+    private Cart cart;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+        List<SimpleGrantedAuthority> authorities = this.roles.stream().map(role -> new SimpleGrantedAuthority(role.getRoleName())).collect(Collectors.toList());
+        return authorities;
     }
 
     @Override

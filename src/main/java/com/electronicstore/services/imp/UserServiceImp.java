@@ -2,11 +2,14 @@ package com.electronicstore.services.imp;
 
 import com.electronicstore.dtos.PageableResponse;
 import com.electronicstore.dtos.UserDto;
+import com.electronicstore.entity.Role;
 import com.electronicstore.entity.User;
 import com.electronicstore.exception.ResourceNotFoundException;
 import com.electronicstore.helper.Helper;
+import com.electronicstore.repository.RoleRepository;
 import com.electronicstore.repository.UserRepository;
 import com.electronicstore.services.UserService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,26 +33,36 @@ import java.util.stream.Collectors;
 public class UserServiceImp implements UserService {
     @Autowired
     UserRepository userRepository;
-
     @Value("${user.profile.image.path}")
     private String imagePath;
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
+    @Value("${normal.role.id}")
+    private String normalRoleId;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    ModelMapper mapper;
     Logger logger= LoggerFactory.getLogger(UserServiceImp.class);
     @Override
     public UserDto crateUser(UserDto userDto) {
         String userId = UUID.randomUUID().toString();
         userDto.setUserId(userId);
-        // encoding password
         userDto.setPassword(passwordEncoder.encode(userDto.getPassword()));
+//        User user=dtoToEntity(userDto);
+        User user = mapper.map(userDto,User.class);
 
-        User user=dtoToEntity(userDto);
+
+        Role role = roleRepository.findById(normalRoleId).get();
+        user.getRoles().add(role);
+        System.out.println("++++++++++"+role);
         User savedUser = userRepository.save(user);
-        UserDto newDto=entityToDto(savedUser);
 
-        return newDto;
+
+
+        UserDto newDto=entityToDto(savedUser);
+        return mapper.map(savedUser, UserDto.class);
     }
 
 

@@ -6,6 +6,7 @@ import com.electronicstore.services.imp.CategoryServiceImp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,17 +21,19 @@ public class CategoryController {
 
     @Autowired
     ProductService productService;
-
+//    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<CategoryDto>createCategory(@Valid @RequestBody CategoryDto categoryDto){
         CategoryDto cratedCategory = categoryServiceImp.crateCategory(categoryDto);
         return new ResponseEntity<>(cratedCategory,HttpStatus.CREATED);
     }
+//    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{categoryId}")
     public ResponseEntity<CategoryDto>updateCategory(@Valid @RequestBody CategoryDto categoryDto, @PathVariable("categoryId")String categoryId){
         CategoryDto updateCategory = categoryServiceImp.updateCategory(categoryDto, categoryId);
         return new ResponseEntity<>(updateCategory,HttpStatus.OK);
     }
+//    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{categoryId}")
     public ResponseEntity<ApiResponseMessage>deleteCategory(@PathVariable("categoryId") String categoryId){
         categoryServiceImp.deleteCategory(categoryId);
