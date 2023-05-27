@@ -1,6 +1,8 @@
 package com.electronicstore.config;
 
+import org.apache.catalina.filters.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -17,8 +19,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import security.JwtAuthenticationEntryPoint;
 import security.JwtAuthenticationFilter;
+
+import java.util.Arrays;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -104,6 +110,33 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
+    }
+    @Bean
+    public FilterRegistrationBean cordBean(){
+       UrlBasedCorsConfigurationSource source=new UrlBasedCorsConfigurationSource();
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
+//        configuration.setAllowedOrigins(Arrays.asList("https://domain2.com","http://localhost:4200"));
+        configuration.addAllowedOriginPattern("*");// for All
+        configuration.addAllowedHeader("Authorization");
+        configuration.addAllowedHeader("Content-type");
+        configuration.addAllowedHeader("Accept");
+        configuration.addAllowedMethod("Get");
+        configuration.addAllowedMethod("Post");
+        configuration.addAllowedMethod("Delete");
+        configuration.addAllowedMethod("put");
+        configuration.addAllowedMethod("Options");
+        configuration.setMaxAge(3600L);
+
+
+
+
+        source.registerCorsConfiguration("/**",configuration);
+
+
+        FilterRegistrationBean filterRegistrationBean=new FilterRegistrationBean(new CorsFilter());// source is needed new CorsFilter(source)
+        filterRegistrationBean.setOrder(-1);
+        return filterRegistrationBean;
     }
 
 }
