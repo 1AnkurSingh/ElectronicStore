@@ -38,6 +38,16 @@ public class SecurityConfig {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+
+    private final String [] PUBLIC_URLS={
+            "/swagger-ui/**",
+            "/webjars/**",
+            "/swagger-resources/**",
+            "/v3/api-docs",
+            "/v2/api-docs"
+
+    };
+
 //    @Bean
 //    public UserDetailsService userDetailsService(){
     //        UserDetails normalUser = User.builder()
@@ -59,6 +69,9 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
+
+
 //        http.authorizeRequests()
 //                        .anyRequest()
 //                                .authenticated()
@@ -84,6 +97,8 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.POST,"/users/create")
                 .permitAll()
                 .antMatchers(HttpMethod.DELETE,"/users/delete/userId").hasRole("ADMIN")
+                .antMatchers(PUBLIC_URLS)
+                .permitAll()
                                                                                      .anyRequest()
                                                                                              .authenticated()
                                                                         .and()
@@ -135,7 +150,7 @@ public class SecurityConfig {
 
 
         FilterRegistrationBean filterRegistrationBean=new FilterRegistrationBean(new CorsFilter());// source is needed new CorsFilter(source)
-        filterRegistrationBean.setOrder(-1);
+        filterRegistrationBean.setOrder(0);
         return filterRegistrationBean;
     }
 
