@@ -1,5 +1,6 @@
 package com.electronicstore.dtos;
 import com.electronicstore.validate.ImageNameValid;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.persistence.Column;
@@ -17,6 +18,7 @@ import java.util.Set;
 public class UserDto {
     private String userId;
     @Size(min = 2, max = 20,message = "Invalid Name!!")
+//    @ApiModelProperty(value = "user-name",name = "userName!",required = true,notes = "name of new user")
     private String name;
     @Email(message = "Invalid User Email !!")
     @NotBlank(message = "Email is required!!")

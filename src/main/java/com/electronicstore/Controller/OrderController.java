@@ -5,10 +5,14 @@ import com.electronicstore.dtos.CreateOrderRequest;
 import com.electronicstore.dtos.OrderDto;
 import com.electronicstore.dtos.PageableResponse;
 import com.electronicstore.services.OrderService;
+import io.swagger.annotations.ApiResponse;
+
+
+
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,7 +24,12 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 //    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping()
+//    @PostMapping()
+//    @ApiResponses(value = {
+//            @ApiResponse(code = 200, message = "Success | OK"),
+//            @ApiResponse(code = 401, message = "not authorized !!"),
+//            @ApiResponse(code = 201, message = "new user created !!")
+//    })
     public ResponseEntity<OrderDto>createOrder(@Valid @RequestBody CreateOrderRequest request )
     {
         OrderDto order = orderService.createOrder(request);

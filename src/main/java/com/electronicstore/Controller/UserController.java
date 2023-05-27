@@ -5,6 +5,8 @@ import com.electronicstore.dtos.PageableResponse;
 import com.electronicstore.dtos.UserDto;
 import com.electronicstore.services.FileService;
 import com.electronicstore.services.imp.UserServiceImp;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @RestController
+@Api(value = "userController" ,description = "REST APIS Related to perform user Operation!!")
 @RequestMapping("/users")
 public class UserController {
     @Autowired
@@ -66,6 +69,7 @@ public class UserController {
         return new ResponseEntity<>(userServiceImp.getUserById(userId),HttpStatus.OK);
     }
     @GetMapping("/getAll")
+//    @ApiOperation(value = "Get All User",response = ResponseEntity.class,tags ={"user-controller "})
     public  ResponseEntity<PageableResponse<UserDto>>getAllUser(@RequestParam (value = "pageNumber",defaultValue = "0" , required = false) int pageNumber,
                                                        @RequestParam(value = "pageSize" ,defaultValue = "10",required = false)int pageSize,
                                                        @RequestParam(value = "sortBy" ,defaultValue = "name",required = false)String sortBy,

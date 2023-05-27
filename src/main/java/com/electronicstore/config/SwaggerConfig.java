@@ -2,37 +2,74 @@ package com.electronicstore.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.service.ApiInfo;
-import springfox.documentation.service.Contact;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spi.service.contexts.SecurityContext;
+import springfox.documentation.spring.web.plugins.ApiSelectorBuilder;
 import springfox.documentation.spring.web.plugins.Docket;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
+
     @Bean
-    public Docket docket(){
+    public Docket docket() {
         Docket docket = new Docket(DocumentationType.SWAGGER_2);
-        docket.apiInfo(getAPiInfo());
-        return docket;
+        docket.apiInfo(getApiInfo());
+
+
+        docket.securityContexts(Arrays.asList(getSecurityContext()));
+        docket.securitySchemes(Arrays.asList(getSchemes()));
+
+        ApiSelectorBuilder select = docket.select();
+        select.apis(RequestHandlerSelectors.any());
+        select.paths(PathSelectors.any());
+        Docket build = select.build();
+        return build;
+    }
+
+
+    private SecurityContext getSecurityContext() {
+
+        SecurityContext context = SecurityContext
+                .builder()
+                .securityReferences(getSecurityReferences())
+                .build();
+        return context;
+    }
+
+    private List<SecurityReference> getSecurityReferences() {
+        AuthorizationScope[] scopes = {new AuthorizationScope("Global", "Access Every Thing")};
+        return Arrays.asList(new SecurityReference("JWT", scopes));
 
     }
 
-    private ApiInfo getAPiInfo() {
-        ApiInfo apiInfo = new ApiInfo(
-                "Electronic Store Backend :APIS",
-                "This is Backend project Created By Ankur Singh",
-                "1.0.0v",
-                "https://www.learncodewithdurgesh.com",
-                new Contact("Ankur","https://instagram.com","ankurrana231002@gmail.com"),
-                "License of APIS",
-                "https://www.learncodewithdurgesh.com/about",
-                new ArrayList<>()
+    private ApiKey getSchemes() {
+        return new ApiKey("JWT", "Authorization", "header");
+    }
 
+
+    private ApiInfo getApiInfo() {
+
+        ApiInfo apiInfo = new ApiInfo(
+                "Electronic Store Backend : APIS ",
+                "This is backend project created by Ankur Singh",
+                "1.0.0V",
+                "https://www.learncodewithdurgesh.com",
+                new Contact("Durgesh", "https://swagger.io/docs/", "ankurrana231002@gmail.com"),
+                "License of APIS",
+                "https://swagger.io/docs/",
+                new ArrayDeque<>()
         );
 
         return apiInfo;
+
     }
 
 
