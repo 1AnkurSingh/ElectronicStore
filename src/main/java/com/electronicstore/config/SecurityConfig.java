@@ -92,6 +92,8 @@ public class SecurityConfig {
                                                 .authorizeRequests()
                                                              .antMatchers("/auth/login")
                                                                          .permitAll()
+                .antMatchers(HttpMethod.GET,"/test")
+                .permitAll()
                 .antMatchers("/auth/google")
                 .permitAll()
                 .antMatchers(HttpMethod.POST,"/users/create")
