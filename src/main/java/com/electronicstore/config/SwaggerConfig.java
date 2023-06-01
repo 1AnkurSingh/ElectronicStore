@@ -61,8 +61,8 @@ public class SwaggerConfig {
                 "Electronic Store Backend : APIS ",
                 "This is backend project created by Ankur Singh",
                 "1.0.0V",
-                "https://www.learncodewithdurgesh.com",
-                new Contact("Durgesh", "https://swagger.io/docs/", "ankurrana231002@gmail.com"),
+                "https://www.Google.com",
+                new Contact("Ankur singh", "https://swagger.io/docs/", "ankurrana231002@gmail.com"),
                 "License of APIS",
                 "https://swagger.io/docs/",
                 new ArrayDeque<>()
