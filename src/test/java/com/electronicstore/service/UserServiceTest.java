@@ -80,4 +80,10 @@ public class UserServiceTest {
 
     }
 
+    public void updateUserTest(){
+        String userId="";
+        UserDto userDto=UserDto.builder()
+
+    }
+
 }
