@@ -1,5 +1,6 @@
 package com.electronicstore.service;
 
+import com.electronicstore.dtos.PageableResponse;
 import com.electronicstore.dtos.UserDto;
 import com.electronicstore.entity.Role;
 import com.electronicstore.entity.User;
@@ -18,9 +19,14 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.meta.When;
+import java.awt.print.Pageable;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -61,7 +67,8 @@ public class UserServiceTest {
                 .gender("male")
                 .imageName("abc.png")
                 .password("abcd")
-                .roles(Set.of(role)).build();
+                .roles(Set.of(role))
+               .build();
        rollId="abc";
 
     }
@@ -80,10 +87,63 @@ public class UserServiceTest {
 
     }
 
-    public void updateUserTest(){
-        String userId="";
-        UserDto userDto=UserDto.builder()
+
+    //update user test
+    @Test
+    public void updateUserTest() {
+        String userId = "hosdhfosdhvo";
+        UserDto userDto = UserDto.builder()
+                .name("Durgesh Kumar Tiwari")
+                .about("This is updated user about details")
+                .gender("Male")
+                .imageName("xyz.png")
+                .build();
+
+        Mockito.when(userRepository.findById(Mockito.anyString())).thenReturn(Optional.of(user));
+        Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
+
+        UserDto updatedUser = userService.updateUser(userDto, userId);
+//        UserDto updatedUser=mapper.map(user,UserDto.class);
+        System.out.println(updatedUser.getName());
+        System.out.println(updatedUser.getImageName());
+        Assertions.assertNotNull(userDto);
+        Assertions.assertEquals(userDto.getName(), updatedUser.getName(), "Name is not validated !!");
+        //multiple assertion are valid..
+
 
     }
+
+    //delete user test case
+    //delete user test case
+
+    @Test
+    public void deleteUserTest() {
+        String userid = "userIdabc";
+        Mockito.when(userRepository.findById("userIdabc")).thenReturn(Optional.of(user));
+        userService.deleteUser(userid);
+        Mockito.verify(userRepository, Mockito.times(1)).delete(user);
+
+
+    }
+
+
+
+
+    @Test
+    public void getUserByIdTest() {
+
+        String userId = "userIdTest";
+        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+
+        //actual call of service method
+
+        UserDto userDto = userService.getUserById(userId);
+
+        Assertions.assertNotNull(userDto);
+        Assertions.assertEquals(user.getName(), userDto.getName(), "Name not matched !!");
+
+
+    }
+
 
 }
