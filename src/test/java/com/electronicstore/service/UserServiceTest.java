@@ -1,6 +1,4 @@
 package com.electronicstore.service;
-
-import com.electronicstore.dtos.PageableResponse;
 import com.electronicstore.dtos.UserDto;
 import com.electronicstore.entity.Role;
 import com.electronicstore.entity.User;
@@ -10,23 +8,11 @@ import com.electronicstore.services.UserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.meta.When;
-import java.awt.print.Pageable;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
