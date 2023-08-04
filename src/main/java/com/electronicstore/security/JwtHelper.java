@@ -1,4 +1,4 @@
-package security;
+package com.electronicstore.security;
 
 
 import java.util.Date;
@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-
-import org.springframework.stereotype.Component;
 
 @Component
 public class JwtHelper {

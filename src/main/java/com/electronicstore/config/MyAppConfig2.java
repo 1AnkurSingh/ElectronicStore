@@ -3,7 +3,7 @@ package com.electronicstore.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
-import security.JwtAuthenticationEntryPoint;
+import com.electronicstore.security.JwtAuthenticationEntryPoint;
 
 @Component
 public class MyAppConfig2 {
