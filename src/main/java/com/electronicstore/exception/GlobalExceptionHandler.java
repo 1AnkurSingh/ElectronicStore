@@ -60,4 +60,16 @@ public class GlobalExceptionHandler {
                 .success(false).build();
         return new ResponseEntity<>(responseMessage,HttpStatus.BAD_REQUEST);
     }
+// Catch all exception not mention in other class
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponseMessage> handleAllExceptions(Exception ex) {
+        logger.error("An error occurred: " + ex.getMessage());
+
+        ApiResponseMessage responseMessage = ApiResponseMessage.builder()
+                .message(ex.getMessage())
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .success(false).build();
+        return new ResponseEntity<>(responseMessage, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 }

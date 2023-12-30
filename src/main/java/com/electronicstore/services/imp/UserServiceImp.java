@@ -88,7 +88,6 @@ public class UserServiceImp implements UserService {
 
 
         // delete user profile image
-
         String fullPath = imagePath + user.getImageName();
 
         try{
@@ -127,6 +126,12 @@ public class UserServiceImp implements UserService {
         return pageableResponse;
     }
 
+    public List<UserDto>getAllUser1(){
+        List<User>  users = userRepository.findAll();
+        List<UserDto> dtoList = users.stream().map(user -> entityToDto(user)).collect(Collectors.toList());
+        return dtoList;
+    }
+
     @Override
     public UserDto getUserByEmail(String userEmail) {
         User user = userRepository.findByEmail(userEmail).orElseThrow(() -> new ResourceNotFoundException("Email Not Found Exception!!!!"));
@@ -158,6 +163,8 @@ public class UserServiceImp implements UserService {
 
         return user;
     }
+
+
     private UserDto entityToDto(User savedUser) {
         UserDto build = UserDto.builder()
                 .userId(savedUser.getUserId())
