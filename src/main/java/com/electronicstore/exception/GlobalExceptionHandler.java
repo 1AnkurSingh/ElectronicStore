@@ -33,10 +33,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(responseMessage,HttpStatus.NOT_FOUND);
     }
 
-    // Method argument not valid exception
+//     Method argument not valid exception
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, Object>>handleMethodNotValidException(MethodArgumentNotValidException ex){
         List<ObjectError> allErrors = ex.getBindingResult().getAllErrors();
+        System.out.println(allErrors);
         Map<String , Object> response=new HashMap<>();
         allErrors.stream().forEach(objectError -> {
             String message = objectError.getDefaultMessage();
