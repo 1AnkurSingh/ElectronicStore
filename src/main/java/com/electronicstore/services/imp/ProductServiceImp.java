@@ -138,6 +138,8 @@ public class ProductServiceImp implements ProductService {
 
 
         product.setAddedDate(new Date());
+
+        // Save Category inside product
         product.setCategory(category);
         Product savedProduct = productRepository.save(product);
         return mapper.map(savedProduct, ProductDto.class);

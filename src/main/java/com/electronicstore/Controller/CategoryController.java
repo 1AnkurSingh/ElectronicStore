@@ -70,7 +70,7 @@ public class CategoryController {
 
 
     // create product with category
-
+    // Mapping
     @PostMapping("/{categoryId}/products")
     public ResponseEntity<ProductDto>createProductWithCategory(@PathVariable("categoryId")String categoryId, @RequestBody ProductDto productDto){
 
@@ -80,6 +80,7 @@ public class CategoryController {
 
 
     // update category of product
+    // Mapping
     @PutMapping("/{categoryId}/products/{productId}")
     public ResponseEntity<ProductDto>updateCategoryOfProduct(@PathVariable String categoryId,@PathVariable String productId){
         ProductDto productDto = productService.updateCategory(productId, categoryId);

@@ -40,7 +40,7 @@ public interface ProductService {
     PageableResponse<ProductDto>searchByTitle(int pageNumber,int pageSize,String sortBy, String sortDir,String subTitle);
 
 
-    // crate product with id
+    // create product with id
     ProductDto createWithCategory(ProductDto productDto, String CategoryId);
 
 
