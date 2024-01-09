@@ -32,20 +32,20 @@ public class ProductController {
     @Value("${product.image.path}")
     private String imagePath;
     //delete
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
     public ResponseEntity<ProductDto>createProduct(@RequestBody ProductDto productDto){
         ProductDto productCreated = productService.createProduct(productDto);
         return  new ResponseEntity<>(productCreated, HttpStatus.CREATED);
 
     }
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/update/{productId}")
     public ResponseEntity<ProductDto>updateProduct(@RequestBody ProductDto productDto,@PathVariable("productId") String productId){
         ProductDto updatedProduct = productService.updateProduct(productDto, productId);
         return new ResponseEntity<>(updatedProduct,HttpStatus.OK);
     }
-//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/delete/{productId}")
     public ResponseEntity<ApiResponseMessage>deleteProduct(@PathVariable("productId") String productId){
         productService.deleteProduct(productId);

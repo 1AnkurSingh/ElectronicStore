@@ -54,7 +54,7 @@ public class UserServiceImp implements UserService {
 //        User user=dtoToEntity(userDto);
         User user = mapper.map(userDto,User.class);
 
-
+        // Fetch role of normal and set it to user  normalRoleId by this role id .
         Role role = roleRepository.findById(normalRoleId).get();
         user.getRoles().add(role);
         System.out.println("++++++++++"+role);

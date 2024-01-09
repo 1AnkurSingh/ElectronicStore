@@ -30,6 +30,7 @@ public class OrderController {
 //            @ApiResponse(code = 401, message = "not authorized !!"),
 //            @ApiResponse(code = 201, message = "new user created !!")
 //    })
+    @PostMapping
     public ResponseEntity<OrderDto>createOrder(@Valid @RequestBody CreateOrderRequest request )
     {
         OrderDto order = orderService.createOrder(request);

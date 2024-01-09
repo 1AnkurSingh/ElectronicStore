@@ -42,6 +42,26 @@ public class SecurityConfig {
 
     };
 
+
+
+//    loadUserByUsername Method:
+//
+//            "Called for user details during login."
+//            "Needed for authenticating users."
+//    UserDetailsService Interface:
+//
+//            "Has loadUserByUsername method."
+//            "Can't directly call methods of an interface."
+//    Using InMemoryUserDetailsManager:
+//
+//            "Implements UserDetailsService."
+//            "Stores normalUser and adminUser details in memory."
+//    Spring Security's Internal Working:
+//
+//            "Automatically uses loadUserByUsername."
+//            "Fetches user details from InMemoryUserDetailsManager."
+//            "Checks username and password for login.
+
 //    @Bean
 //    public UserDetailsService userDetailsService(){
     //        UserDetails normalUser = User.builder()
@@ -81,7 +101,7 @@ public class SecurityConfig {
 
         http.csrf()
                         .disable()
-                                .cors()
+                                .cors()// If we want to use cordBean then remove .cors().disable
                                         .disable()
                                                 .authorizeRequests()
                                                              .antMatchers("/auth/login")
@@ -109,8 +129,23 @@ public class SecurityConfig {
 
     }
 
+    /*
+        Role of Authentication Provider:
 
+        DaoAuthenticationProvider handles the authentication process in Spring Security. It verifies the user's login credentials.
+        Integration with UserDetailsService:
 
+        It uses UserDetailsService. The loadUserByUsername method of the UserDetailsService interface retrieves user details, including username, password, and roles.
+        Password Matching:
+
+        Setting the password encoder with daoAuthenticationProvider.setPasswordEncoder(passwordEncoder()); allows it to encode the user-entered password and then compare it with the password stored in the database.
+        Returning the Provider:
+
+        Finally, it returns the fully configured DaoAuthenticationProvider bean, which is used in the Spring Security authentication mechanism.
+        Main Usage:
+
+        When a user attempts to log in, the DaoAuthenticationProvider verifies the provided username and password against the credentials stored in the database.
+                Thus, DaoAuthenticationProvider is a crucial part of your Spring Security setup, managing user authentication efficiently and securely.*/
     @Bean
         DaoAuthenticationProvider daoAuthenticationProvider(){
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -123,11 +158,12 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
     @Bean
+    // Use For cors with Spring boot
     public FilterRegistrationBean cordBean(){
        UrlBasedCorsConfigurationSource source=new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowCredentials(true);
-//        configuration.setAllowedOrigins(Arrays.asList("https://domain2.com","http://localhost:4200"));
+//       configuration.setAllowedOrigins(Arrays.asList("https://domain2.com","http://localhost:4200"));
         configuration.addAllowedOriginPattern("*");// for All
         configuration.addAllowedHeader("Authorization");
         configuration.addAllowedHeader("Content-type");
@@ -138,13 +174,7 @@ public class SecurityConfig {
         configuration.addAllowedMethod("put");
         configuration.addAllowedMethod("Options");
         configuration.setMaxAge(3600L);
-
-
-
-
         source.registerCorsConfiguration("/**",configuration);
-
-
         FilterRegistrationBean filterRegistrationBean=new FilterRegistrationBean(new CorsFilter());// source is needed new CorsFilter(source)
         filterRegistrationBean.setOrder(0);
         return filterRegistrationBean;

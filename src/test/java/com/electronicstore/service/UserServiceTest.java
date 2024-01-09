@@ -1,4 +1,5 @@
 package com.electronicstore.service;
+import com.electronicstore.dtos.PageableResponse;
 import com.electronicstore.dtos.UserDto;
 import com.electronicstore.entity.Role;
 import com.electronicstore.entity.User;
@@ -13,6 +14,12 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -35,18 +42,17 @@ public class UserServiceTest {
     String rollId;
 
 
-
     @Autowired
     private UserService userService;
 
     @BeforeEach
-    public  void init(){
+    public void init() {
 
-        role=Role.builder()
+        role = Role.builder()
                 .roleId("abc")
                 .roleName("NORMAL").build();
 
-       user = User.builder()
+        user = User.builder()
                 .name("Ankur singh")
                 .email("ankur@123")
                 .about("testing create method ")
@@ -54,14 +60,14 @@ public class UserServiceTest {
                 .imageName("abc.png")
                 .password("abcd")
                 .roles(Set.of(role))
-               .build();
-       rollId="abc";
+                .build();
+        rollId = "abc";
 
     }
 
 
     @Test
-    public  void createUser(){
+    public void createUser() {
         Mockito.when(userRepository.save(Mockito.any())).thenReturn(user);
 
         Mockito.when(roleRepository.findById(Mockito.anyString())).thenReturn(Optional.of(role));
@@ -69,7 +75,7 @@ public class UserServiceTest {
         UserDto user1 = userService.crateUser(mapper.map(user, UserDto.class));
         System.out.println(user1.getName());
         Assertions.assertNotNull(user1);
-        Assertions.assertEquals("Ankur singh",user1.getName());
+        Assertions.assertEquals("Ankur singh", user1.getName());
 
     }
 
@@ -112,7 +118,34 @@ public class UserServiceTest {
 
     }
 
+    @Test
+    public void getAllUsersTest() {
+        User user1 = User.builder()
+                .name("Ankit")
+                .email("durgesh@gmail.com")
+                .about("This is testing create method")
+                .gender("Male")
+                .imageName("abc.png")
+                .password("lcwd")
+                .roles(Set.of(role))
+                .build();
+        User user2 = User.builder()
+                .name("Uttam")
+                .email("durgesh@gmail.com")
+                .about("This is testing create method")
+                .gender("Male")
+                .imageName("abc.png")
+                .password("lcwd")
+                .roles(Set.of(role))
+                .build();
+        List<User> userList = Arrays.asList(user, user1, user2);
+        Page<User> page = new PageImpl<>(userList);
+        Mockito.when(userRepository.findAll((Pageable) Mockito.any())).thenReturn(page);
+        PageableResponse<UserDto> allUser = userService.getAllUser(1, 2, "name", "asc");
+        Assertions.assertEquals(3, allUser.getContent().size());
 
+
+    }
 
 
     @Test
@@ -131,5 +164,68 @@ public class UserServiceTest {
 
     }
 
+    @Test
+    public void getUserByEmailTest() {
 
+        String emailId = "durgesh@gmail.com";
+        Mockito.when(userRepository.findByEmail(emailId)).thenReturn(Optional.of(user));
+        UserDto userDto = userService.getUserByEmail(emailId);
+        Assertions.assertNotNull(userDto);
+        Assertions.assertEquals(user.getEmail(), userDto.getEmail(), "Email not matched !!");
+
+
+    }
+
+    @Test
+    public void searchUserTest() {
+
+        User user1 = User.builder()
+                .name("Ankit Kumar")
+                .email("durgesh@gmail.com")
+                .about("This is testing create method")
+                .gender("Male")
+                .imageName("abc.png")
+                .password("lcwd")
+                .roles(Set.of(role))
+                .build();
+
+        User user2 = User.builder()
+                .name("Uttam Kumar")
+                .email("durgesh@gmail.com")
+                .about("This is testing create method")
+                .gender("Male")
+                .imageName("abc.png")
+                .password("lcwd")
+                .roles(Set.of(role))
+                .build();
+
+        User user3 = User.builder()
+                .name("Pankaj Kumar")
+                .email("durgesh@gmail.com")
+                .about("This is testing create method")
+                .gender("Male")
+                .imageName("abc.png")
+                .password("lcwd")
+                .roles(Set.of(role))
+                .build();
+
+        String keywords = "Kumar";
+        Mockito.when(userRepository.findByNameContaining(keywords)).thenReturn(Arrays.asList(user, user1, user2, user3));
+        List<UserDto> userDtos = userService.getUserByKeyWord(keywords);
+        Assertions.assertEquals(4, userDtos.size(), "size not matched !!");
+    }
+
+    @Test
+    public void findUserByEmailOptionalTest() {
+
+        String email = "durgeshkumar@gmail.com";
+
+        Mockito.when(userRepository.findByEmail(email)).thenReturn(Optional.of(user));
+        Optional<User> userByEmailOptional = userService.findUserByEmailOptional(email);
+        Assertions.assertTrue(userByEmailOptional.isPresent());
+        User user1 = userByEmailOptional.get();
+        Assertions.assertEquals(user.getEmail(), user1.getEmail(), "email does not matched ");
+
+
+    }
 }

@@ -23,7 +23,7 @@ public class CategoryController {
 
     @Autowired
     ProductService productService;
-//    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')") // we can also add this in Security-config
     @PostMapping("/create")
     public ResponseEntity<CategoryDto>createCategory(@Valid @RequestBody CategoryDto categoryDto){
         CategoryDto cratedCategory = categoryServiceImp.crateCategory(categoryDto);

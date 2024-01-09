@@ -30,12 +30,17 @@ public class ElectronicStoreApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		System.out.println(passwordEncoder.encode("456"));
+		System.out.println(passwordEncoder.encode("456")); // temporary only for testing purpose.
 
 		try{
 
-			Role roll_Admin = Role.builder().roleId(role_admin_id).roleName("ROll_Admin").build();
-			Role roll_normal = Role.builder().roleId(role_normal_id).roleName("ROll_Normal").build();
+			Role roll_Admin = Role.builder().
+					roleId(role_admin_id).
+					roleName("ROll_Admin").build();
+			Role roll_normal = Role.builder().
+					roleId(role_normal_id).
+					roleName("ROll_Normal").
+					build();
 			roleRepository.save(roll_Admin);
 			roleRepository.save(roll_normal);
 

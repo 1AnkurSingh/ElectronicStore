@@ -34,7 +34,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
-@Api(value = "AuthController",description = "Api for auth controller!!")
+@Api(value = "AuthController",description = "Api for auth controller!!") // Swagger Annotation
 //@CrossOrigin("*")
 //@CrossOrigin(
 //        origins = "http://localhost:4200",
@@ -101,10 +101,10 @@ public class AuthController {
     public ResponseEntity<JwtResponse>loginWithGoogle(@RequestBody Map<String,Object> data) throws IOException {
 
         // get the id token from request
-             String idToken=data.get("idToken").toString();
+        String idToken=data.get("idToken").toString();
 
+//       Both classes are used for Google token verifier.
         NetHttpTransport netHttpTransport = new NetHttpTransport();
-
         JacksonFactory jacksonFactory = JacksonFactory.getDefaultInstance();
 
         GoogleIdTokenVerifier.Builder verifier = new GoogleIdTokenVerifier.Builder(netHttpTransport, jacksonFactory).setAudience(Collections.singleton(googleClintId));
